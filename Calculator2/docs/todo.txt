@@ -1,0 +1,2 @@
+realtime zmena x na y tou 
+zadavani cislic klavesnici
