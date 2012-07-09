@@ -23,14 +23,30 @@ public class Ciselnik {
 			cislo[i].setFont(fontCisla);
 			cislo[i].setFocusPainted(false);
 			switch (i) {
-				case 0 :						// cislo with index 0 is "Ans"
-					cislo[i].setText("Ans");
-					break;
-				case 1 :
-					cislo[i].setText("\u002E");	// cislo with index 1 is "." 
-					break;
-				default :
-					cislo[i].setText(Integer.toString(i - 2)); // cislo with index for example 7 is 7 - 2 -> 5... its little bit edited cause of render.
+				case 0 : cislo[i].setText("Ans");// cislo with index 0 is "Ans"
+				break;
+				case 1 : cislo[i].setText("\u002E");	// cislo with index 1 is "." 
+				break;
+				case 2: cislo[i].setText("0");
+				break;
+				case 3: cislo[i].setText("3");
+				break;
+				case 4: cislo[i].setText("2");
+				break;
+				case 5: cislo[i].setText("1");
+				break;
+				case 6: cislo[i].setText("6");
+				break;
+				case 7: cislo[i].setText("5");
+				break;
+				case 8: cislo[i].setText("4");
+				break;
+				case 9: cislo[i].setText("9");
+				break;
+				case 10: cislo[i].setText("8");
+				break;
+				case 11: cislo[i].setText("7");
+				break;
 			}
 		}
 

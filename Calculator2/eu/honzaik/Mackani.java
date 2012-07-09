@@ -17,7 +17,7 @@ public class Mackani {
 		}
 	}
 	
-	public void mackat(JRadioButton rB1, JRadioButton rB2, JButton cislo, JTextField x, JTextField y, String ansVal, int pocetOperaci) {
+	public void mackat(JRadioButton rB1, JRadioButton rB2, JButton cislo, JTextField x, JTextField y, String ansVal, int pocetOperaci, int operace) {
 		boolean xIsNumber = false;
 		boolean yIsNumber = false;
 		String xt = null;
@@ -135,7 +135,7 @@ public class Mackani {
 			} else if (xt == null && text == ansVal) {
 				x.setText(text);
 			}
-		} else if (rB2.isSelected() && yIsNumber) {
+		} else if (rB2.isSelected() && yIsNumber && operace != 5) {
 			if (yt != null && text != ansVal) {
 				String temp = y.getText();
 				y.setText(temp + text);

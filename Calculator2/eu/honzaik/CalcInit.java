@@ -24,11 +24,12 @@ public class CalcInit {
 	private String vysledek = null;
 	private double cisloX;
 	private double cisloY;
-	private int operace; // 1 = scitani; 2 = odecitani; 3 = nasobeni; 4 =
-	                     // deleni; 5 = mocneni
+	private int operace; // 1 = scitani; 2 = odecitani; 3 = nasobeni; 4 = deleni; 5 = mocneni
 	private int pocetOperaci = 0;
+	private int pocetOperaciAllTheTime = 0;
 
 	public void CalcRun() {
+		
 		// font cisel
 		Font fontCisla = new Font("Arial", Font.BOLD, 20);
 
@@ -39,7 +40,15 @@ public class CalcInit {
 				exit(mainWindow);
 			}
 		});
-
+		
+		// debug
+		
+		final JLabel pocetOp = new JLabel();
+		pocetOp.setBounds(30, 50, 30, 30);
+		pocetOp.setText(pocetOperaciAllTheTime + "");
+		
+		mainWindow.setLayout(null);
+		mainWindow.getContentPane().add(pocetOp);
 		// text fields
 
 		final JTextField x = new Display().createX();
@@ -121,67 +130,86 @@ public class CalcInit {
 
 		funkce[0].addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				y.setVisible(true);
 				jl.setText(funkce[0].getText());
 				eF.setText(null);
 				rB[1].setSelected(true);
 				operace = 1;
+				isX = false;
 			}
 		});
 		funkce[1].addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				y.setVisible(true);
 				jl.setText(funkce[1].getText());
 				eF.setText(null);
 				rB[1].setSelected(true);
 				operace = 2;
+				isX = false;
 			}
 		});
 		funkce[2].addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				y.setVisible(true);
 				jl.setText(funkce[2].getText());
 				eF.setText(null);
 				rB[1].setSelected(true);
 				operace = 3;
+				isX = false;
 			}
 		});
 		funkce[3].addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				y.setVisible(true);
 				jl.setText(funkce[3].getText());
 				eF.setText(null);
 				rB[1].setSelected(true);
 				operace = 4;
+				isX = false;
 			}
 		});
 		funkce[4].addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jl.setText(funkce[4].getText());
 				eF.setText(null);
-				rB[1].setSelected(true);
 				operace = 5;
+				isX = true;
+				rB[0].setSelected(true);
+				y.setVisible(false);
+				y.setText("2.0");
 			}
 		});
 		funkce[5].addActionListener(new java.awt.event.ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
+				canCount = true;
+				System.out.println("\n");
 				try {
-					cisloX = new Double(x.getText());
+					String tmp = x.getText();
+					cisloX = new Double(tmp);
 				} catch (NumberFormatException ne) {
 					eF.setText("První číslo není definováno! (x)\n");
+					System.out.println(ne);
 					canCount = false;
 				}
+				
 				try{
-					cisloY = new Double(y.getText());
+					String tmp = y.getText();
+					cisloY = new Double(tmp);
 				} catch (NumberFormatException ne) {
 					String temp = eF.getText();
+					System.out.println(ne);
 					eF.setText(temp + "Druhé číslo není definováno! (y)\n");
 					canCount = false;
-				}	
+				}
 				
 				if(operace == 0){
 					String temp = eF.getText();
 					eF.setText(temp + "Neni zadána operace!\n");
+					canCount = false;
 				}
 				
 				if (canCount) {
-					cisloY = new Double(y.getText());
 					switch (operace) {
 						case 1 :
 							vysledek = new Priklad(cisloX, cisloY).scitani() + "";
@@ -205,6 +233,8 @@ public class CalcInit {
 					ansVal = vysledek;
 					poVysledku = true;
 					pocetOperaci++;
+					pocetOperaciAllTheTime++;
+					pocetOp.setText(pocetOperaciAllTheTime + "");
 				}
 			}
 		});
@@ -228,12 +258,14 @@ public class CalcInit {
 						vysledekF.setText(null);
 						rB[0].setSelected(true);
 						poVysledku = false;
+						isX = true;
+						y.setVisible(true);
 					}
 					if (new Mackani().isAns(cis.cislo[in]) && pocetOperaci == 0) {
 						eF.setText("Ans není definováno!\n");
 					} else {
 						eF.setText(null);
-						new Mackani().mackat(rB[0], rB[1], cis.cislo[in], x, y, ansVal, pocetOperaci);
+						new Mackani().mackat(rB[0], rB[1], cis.cislo[in], x, y, ansVal, pocetOperaci, operace);
 					}
 
 				}
@@ -251,15 +283,20 @@ public class CalcInit {
 		ce.setFont(fontCisla);
 		ce.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				x.setText(null);
-				y.setText(null);
+				y.setVisible(true);
+				x.setText("");
+				y.setText("");
 				jl.setText(null);
 				vysledekF.setText(null);
 				rB[0].setSelected(true);
+				isX = true;
 				eF.setText(null);
 				operace = 0;
 				ansVal = null;
 				pocetOperaci = 0;
+				if(poVysledku){
+					poVysledku = false;
+				}
 			}
 		});
 
@@ -268,27 +305,29 @@ public class CalcInit {
 		del.setFont(fontCisla);
 		del.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (isX) {
-					String text = x.getText();
-					String newText = null;
-					if (text.length() > 0) {
-						if (text.charAt(text.length() - 1) == 's') {
-							newText = text.substring(0, text.length() - 3);
-						} else {
-							newText = text.substring(0, text.length() - 1);
+				if(!poVysledku){
+					if (isX) {
+						String text = x.getText();
+						String newText = null;
+						if (text.length() > 0) {
+							if (text.charAt(text.length() - 1) == 's') {
+								newText = text.substring(0, text.length() - 3);
+							} else {
+								newText = text.substring(0, text.length() - 1);
+							}
+							x.setText(newText);
 						}
-						x.setText(newText);
-					}
-				} else {
-					String text = y.getText();
-					String newText = null;
-					if (text.length() > 0) {
-						if (text.charAt(text.length() - 1) == 's') {
-							newText = text.substring(0, text.length() - 3);
-						} else {
-							newText = text.substring(0, text.length() - 1);
+					} else {
+						String text = y.getText();
+						String newText = null;
+						if (text.length() > 0) {
+							if (text.charAt(text.length() - 1) == 's') {
+								newText = text.substring(0, text.length() - 3);
+							} else {
+								newText = text.substring(0, text.length() - 1);
+							}
+							y.setText(newText);
 						}
-						y.setText(newText);
 					}
 				}
 			}
